@@ -6,4 +6,6 @@ RUN apk add --no-cache bash curl unzip ca-certificates fuse openssh-client \
 
 ADD *.sh /
 
+COPY filesystem /
+
 ENTRYPOINT ["/entrypoint.sh"]
