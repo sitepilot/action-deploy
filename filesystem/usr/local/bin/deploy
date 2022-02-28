@@ -44,9 +44,9 @@ function deploy {
 
     cd build
 
-    zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/build/\* $1/composer.*
+    zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/composer.* $1/deploy.conf
 
-    rclone copy ./build/$1.zip $2 --config="./deploy.conf"
+    rclone copy ./build/$1.zip $2 --config=$1/deploy.conf
 }
 
 case "$1" in
