@@ -36,15 +36,11 @@ function deploy_theme {
 }
 
 function deploy {
-    mkdir $1
-    shopt -s extglob
+    mkdir build
 
-    cd ../
+    zip -X -r build/$1.zip . -x *.git* node_modules/\* .* "*/\.*" composer.* build**
 
-    mv ${GITHUB_REPOSITORY#*/} $1
-    zip -r $1.zip $1 *.git* *.github* node_modules/\* deploy.conf
-
-    rclone copy ./$1.zip $2 --config="./deploy.conf"
+    rclone copy ./build/$1.zip $2 --config="./deploy.conf"
 }
 
 case "$1" in
