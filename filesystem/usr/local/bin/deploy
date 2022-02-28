@@ -27,26 +27,23 @@ function replace_version {
 }
 
 function deploy_plugin {
-    NAME=${GITHUB_REPOSITORY#*/}
-    replace_version $NAME.php
-    deploy $1
+    replace_version $1.php
+    deploy $1 $2
 }
 
 function deploy_theme {
     replace_version style.css
     replace_version functions.php
-    deploy $1
+    deploy $1 $2
 }
 
 function deploy {
-    NAME=${GITHUB_REPOSITORY#*/}
-
-    mkdir $NAME
+    mkdir $1
     shopt -s extglob
 
-    zip -r $GITHUB_WORKSPACE/$NAME.zip $GITHUB_WORKSPACE -x "node_modules" -x ".git" -x ".github" -x "deploy.conf" 
+    zip -r $GITHUB_WORKSPACE/$1.zip $GITHUB_WORKSPACE -x "node_modules" -x ".git" -x ".github" -x "deploy.conf" 
 
-    rclone copy ./$NAME.zip $1 --config="./deploy.conf"
+    rclone copy ./$1.zip $2 --config="./deploy.conf"
 }
 
 case "$1" in
