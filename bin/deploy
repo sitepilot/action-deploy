@@ -44,6 +44,8 @@ function deploy {
 
     zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/build/\* $1/composer.* $1/deploy.conf
 
+    rm $1
+
     if [[ -n "$DEPLOY_RELEASE" ]]; then
         rclone copy $1.zip $2 --config=$GITHUB_WORKSPACE/deploy.conf
     fi
