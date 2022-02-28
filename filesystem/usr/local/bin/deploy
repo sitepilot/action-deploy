@@ -36,13 +36,9 @@ function deploy_theme {
 }
 
 function deploy {
-    mkdir -p build
-
-    ln -s $GITHUB_WORKSPACE build/$1 
-
-    cd build
-
-    zip -X -r build/$1.zip . -x *.git* node_modules/\* .* "*/\.*" composer.* build**
+    mkdir build
+    
+    git archive HEAD --prefix=$1/ --format=zip -o build/$1.zip
 
     rclone copy ./build/$1.zip $2 --config="./deploy.conf"
 }
