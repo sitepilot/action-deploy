@@ -46,7 +46,7 @@ function deploy {
 
     zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/composer.* $1/deploy.conf
 
-    rclone copy ./build/$1.zip $2 --config=$1/deploy.conf
+    rclone copy $1.zip $2 --config=$GITHUB_WORKSPACE/deploy.conf
 }
 
 case "$1" in
