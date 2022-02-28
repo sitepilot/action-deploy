@@ -39,7 +39,7 @@ function deploy {
     mkdir $1
     shopt -s extglob
 
-    zip -r $GITHUB_WORKSPACE/$1.zip $GITHUB_WORKSPACE -x "node_modules" -x ".git" -x ".github" -x "deploy.conf" 
+    zip -r $GITHUB_WORKSPACE/$1.zip $GITHUB_WORKSPACE *.git* *.github* node_modules/\* deploy.conf
 
     rclone copy ./$1.zip $2 --config="./deploy.conf"
 }
