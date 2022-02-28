@@ -36,17 +36,15 @@ function deploy_theme {
 }
 
 function deploy {
-    cd $GITHUB_WORKSPACE/../
-
     mkdir -p build
 
     ln -s $GITHUB_WORKSPACE build/$1 
 
     cd build
 
-    zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/composer.* $1/deploy.conf
+    zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/build/\* $1/composer.* $1/deploy.conf
 
-    if [[ -n "$DEPLOY" ]]; then
+    if [[ -n "$DEPLOY_RELEASE" ]]; then
         rclone copy $1.zip $2 --config=$GITHUB_WORKSPACE/deploy.conf
     fi
 }
