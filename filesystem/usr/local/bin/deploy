@@ -38,7 +38,7 @@ function deploy_theme {
 function deploy {
     mkdir -p build
 
-    ln -s build/$1 $GITHUB_WORKSPACE
+    ln -s $GITHUB_WORKSPACE build/$1 
 
     cd build
 
