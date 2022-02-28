@@ -1,0 +1,64 @@
+#!/bin/bash
+
+set -e
+set -o pipefail
+
+COLOR_RED='\033[0;31m'
+COLOR_NONE='\033[0m'
+
+cd "$(dirname "$0")"
+
+function log {
+    DATETIME=$(date '+%Y/%m/%d %H:%M:%S');
+    echo -e "[deploy][$DATETIME] $1"
+}
+
+function error {
+    log "${COLOR_RED}$1${COLOR_NONE}"
+    exit
+}
+
+function replace_version {
+    VERSION=$(echo "${GITHUB_SHA}" | head -c8)
+    [[ $GITHUB_REF == refs/tags/* ]] && VERSION=${GITHUB_REF#refs/*/}
+    [[ $GITHUB_REF == refs/tags/v* ]] && VERSION=${GITHUB_REF#refs/*/v}
+    log "Replace version with $VERSION in $1"
+    sed -i "s/[0-9]*\.[0-9]*\.[0-9]*\-dev/${VERSION}/g" $1
+}
+
+function deploy_plugin {
+    NAME=${GITHUB_REPOSITORY#*/}
+    replace_version $NAME.php
+    deploy $1
+}
+
+function deploy_theme {
+    replace_version style.css
+    replace_version functions.php
+    deploy $1
+}
+
+function deploy {
+    NAME=${GITHUB_REPOSITORY#*/}
+
+    mkdir $NAME
+    shopt -s extglob
+
+    zip -r $GITHUB_WORKSPACE/$NAME.zip $GITHUB_WORKSPACE -x "node_modules" -x ".git" -x ".github" -x "deploy.conf" 
+
+    rclone copy ./$NAME.zip $1 --config="./deploy.conf"
+}
+
+case "$1" in
+    replace-version)
+        replace_version "${@:2}"
+        ;;
+    plugin)
+        deploy_plugin "${@:2}"
+        ;;
+    theme)
+        deploy_theme "${@:2}"
+        ;;
+    *)
+        error "No command specified."
+esac
