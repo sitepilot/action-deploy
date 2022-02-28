@@ -50,9 +50,6 @@ function deploy {
 }
 
 case "$1" in
-    replace-version)
-        replace_version "${@:2}"
-        ;;
     plugin)
         deploy_plugin "${@:2}"
         ;;

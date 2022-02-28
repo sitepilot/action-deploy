@@ -1,4 +1,4 @@
-name: 'Rclone'
+name: 'Deploy'
 description: 'Copy files to a remote destination using rclone.'
 runs:
   using: 'docker'

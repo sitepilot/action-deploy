@@ -1,6 +1,0 @@
-[remote]
-type = sftp
-host = n33.ams1.sitepilot.io
-user = example
-port = 22
-pass = 
