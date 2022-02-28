@@ -6,8 +6,6 @@ set -o pipefail
 COLOR_RED='\033[0;31m'
 COLOR_NONE='\033[0m'
 
-cd "$(dirname "$0")"
-
 function log {
     DATETIME=$(date '+%Y/%m/%d %H:%M:%S');
     echo -e "[deploy][$DATETIME] $1"
