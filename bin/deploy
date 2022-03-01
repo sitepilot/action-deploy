@@ -44,7 +44,7 @@ function deploy {
     mkdir $GITHUB_WORKSPACE/build/
 
     log "Zip files"
-    zip -X -r $GITHUB_WORKSPACE/build/$1.zip $1 -x *.git* $1/node_modules/\* $1/composer.* $1/deploy.conf
+    zip -X -r $GITHUB_WORKSPACE/build/$1.zip $1 -x *.git* $1/node_modules/\* $1/build/\* $1/composer.* $1/deploy.conf
 
     if [[ $GITHUB_REF == refs/tags/* ]]; then
         log "Deploy release"
