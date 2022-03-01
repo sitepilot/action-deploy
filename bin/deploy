@@ -48,7 +48,7 @@ function deploy {
 
     if [[ $GITHUB_REF == refs/tags/* ]]; then
         log "Deploy release"
-        rclone copy $1.zip $2 --config=$GITHUB_WORKSPACE/deploy.conf
+        rclone copy $GITHUB_WORKSPACE/build/$1.zip $2 --config=$GITHUB_WORKSPACE/deploy.conf
     fi
 }
 
