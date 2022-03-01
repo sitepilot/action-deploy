@@ -8,7 +8,7 @@ COLOR_NONE='\033[0m'
 
 function log {
     DATETIME=$(date '+%Y/%m/%d %H:%M:%S');
-    echo -e "[deploy][$DATETIME] $1"
+    echo -e "[deploy] $1"
 }
 
 function error {
@@ -36,17 +36,18 @@ function deploy_theme {
 }
 
 function deploy {
-    mkdir -p build
+    log "Create build directories"
+    cd $GITHUB_WORKSPACE/../
 
-    ln -s $GITHUB_WORKSPACE build/$1 
+    ln -s $GITHUB_WORKSPACE $1
 
-    cd build
+    mkdir $GITHUB_WORKSPACE/build/
 
-    zip -X -r $1.zip $1 -x *.git* $1/node_modules/\* $1/build/\* $1/composer.* $1/deploy.conf
+    log "Zip files"
+    zip -X -r $GITHUB_WORKSPACE/build/$1.zip $1 -x *.git* $1/node_modules/\* $1/composer.* $1/deploy.conf
 
-    rm $1
-
-    if [[ -n "$DEPLOY_RELEASE" ]]; then
+    if [[ $GITHUB_REF == refs/tags/* ]]; then
+        log "Deploy release"
         rclone copy $1.zip $2 --config=$GITHUB_WORKSPACE/deploy.conf
     fi
 }
