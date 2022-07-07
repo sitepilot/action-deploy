@@ -17,7 +17,6 @@ function error {
 }
 
 function replace_version {
-    printenv
     VERSION=$(echo "${GITHUB_SHA}" | head -c8)
     [[ $GITHUB_REF == refs/tags/* ]] && VERSION=${GITHUB_REF#refs/*/}
     [[ $GITHUB_REF == refs/tags/v* ]] && VERSION=${GITHUB_REF#refs/*/v}
